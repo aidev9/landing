@@ -9,6 +9,9 @@ const contactFormSchema = z.object({
   message: z.string().optional(),
 });
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function POST(request: Request) {
   try {
     console.log("Received contact form submission");
