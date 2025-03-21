@@ -9,18 +9,14 @@ const contactFormSchema = z.object({
   message: z.string().optional(),
 });
 
+// Use the newer Next.js App Router conventions
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 export async function POST(request: Request) {
   try {
-    console.log("Received contact form submission");
     const body = await request.json();
-    console.log("Request body:", body);
-
     const validatedData = contactFormSchema.parse(body);
-    console.log("Validated data:", validatedData);
-
     const { name, email, company, message } = validatedData;
 
     // Store the lead in the database
@@ -33,10 +29,8 @@ export async function POST(request: Request) {
       },
     });
 
-    console.log("Lead stored successfully:", lead);
     return NextResponse.json({ success: true, data: lead });
   } catch (error) {
-    console.error("API error:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: error.errors },
