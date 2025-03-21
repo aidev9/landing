@@ -9,9 +9,10 @@ const contactFormSchema = z.object({
   message: z.string().optional(),
 });
 
-// Use Node.js runtime for better Prisma compatibility
-export const runtime = "nodejs";
+// Configure the route for production build
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
