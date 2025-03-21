@@ -9,14 +9,19 @@ const contactFormSchema = z.object({
   message: z.string().optional(),
 });
 
-// Use the newer Next.js App Router conventions
-export const runtime = "edge";
+// Use Node.js runtime for better Prisma compatibility
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log("Received contact form submission");
+    console.log("Request body:", body);
+
     const validatedData = contactFormSchema.parse(body);
+    console.log("Validated data:", validatedData);
+
     const { name, email, company, message } = validatedData;
 
     // Store the lead in the database
@@ -29,8 +34,11 @@ export async function POST(request: Request) {
       },
     });
 
+    console.log("Lead stored successfully:", lead);
     return NextResponse.json({ success: true, data: lead });
   } catch (error) {
+    console.error("Error in contact form submission:", error);
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: error.errors },
