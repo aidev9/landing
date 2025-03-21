@@ -9,10 +9,8 @@ const contactFormSchema = z.object({
   message: z.string().optional(),
 });
 
-// Configure the route for production build
+// Minimal configuration for API route
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
